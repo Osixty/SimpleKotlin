@@ -1,0 +1,4 @@
+<resources>
+    <string name="app_name">SimpleKotlin</string>
+    <string name="task">Button</string>
+</resources>
