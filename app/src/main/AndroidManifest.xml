@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    package="com.zidan.myapplication">
+
+    <application
+        android:allowBackup="true"
+        android:icon="@mipmap/routine_icon"
+        android:label="@string/app_name"
+        android:roundIcon="@mipmap/ic_launcher_round"
+        android:supportsRtl="true"
+        android:theme="@style/Theme.SimpleKotlin">
+
+        <activity android:name=".SplashActivity">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+
+        <activity android:name=".MainActivity" />
+        <activity android:name=".SundayActivity" />
+        <activity android:name=".MondayActivity" />
+        <activity android:name=".TuesdayActivity" />
+        <activity android:name=".WednesdayActivity" />
+        <activity android:name=".ThursdayActivity" />
+        <activity android:name=".FridayActivity" />
+        <activity android:name=".SaturdayActivity" />
+        <activity android:name=".RoutineActivity" />
+        <activity android:name=".PengaturActivity" />
+        <activity android:name=".EditActivity" />
+
+        <meta-data
+            android:name="preloaded_fonts"
+            android:resource="@array/preloaded_fonts" />
+    </application>
+
+</manifest>
