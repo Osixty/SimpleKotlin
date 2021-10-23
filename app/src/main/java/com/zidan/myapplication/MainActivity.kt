@@ -1,6 +1,8 @@
 package com.zidan.myapplication
 
+import android.app.*
 import android.content.Intent
+import android.os.Build
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
@@ -10,6 +12,7 @@ import android.widget.LinearLayout
 import androidx.appcompat.widget.AppCompatButton
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.zidan.myapplication.room.Alarm
 import com.zidan.myapplication.room.AlarmDB
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.coroutines.CoroutineScope
@@ -31,6 +34,8 @@ class MainActivity : AppCompatActivity() {
 
         //Panggil method pembuat recycleView, biar aplikasi gak nge-crash
         setupRecycler()
+
+        createNotificationChannel()
 
         val sundaybutton = findViewById<LinearLayout>(R.id.sunday)
         sundaybutton.setOnClickListener {
@@ -87,6 +92,9 @@ class MainActivity : AppCompatActivity() {
 
     val db by lazy {AlarmDB(this)}
     lateinit var alarmAdapter: AlarmAdapter
+    lateinit var alarmManager: AlarmManager
+    lateinit var pendingIntent: PendingIntent
+    lateinit var calendar: Calendar
 
     override fun onStart() {
         super.onStart()
@@ -121,6 +129,8 @@ class MainActivity : AppCompatActivity() {
             withContext(Dispatchers.Main){
                 alarmAdapter.setData(alarms)
             }
+
+            setAlarm()
         }
     }
 
@@ -134,5 +144,37 @@ class MainActivity : AppCompatActivity() {
             layoutManager = LinearLayoutManager(applicationContext)
             adapter = alarmAdapter
         }
+    }
+
+    private fun createNotificationChannel() {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+
+            val name : CharSequence = "URoutineAlarmChannel"
+            val description = "Channel for Alarm Manager"
+            val importance = NotificationManager.IMPORTANCE_HIGH
+            val channel = NotificationChannel("URoutine", name, importance)
+            channel.description = description
+            val notif_manager = getSystemService(
+                NotificationManager::class.java
+            )
+
+            notif_manager.createNotificationChannel(channel)
+        }
+    }
+
+    private fun setAlarm() {
+        alarmManager = getSystemService(ALARM_SERVICE) as AlarmManager
+        val intent = Intent(this, AlarmReceiver::class.java)
+
+        pendingIntent = PendingIntent.getBroadcast(this, 0, intent, 0)
+
+        alarmManager.setRepeating(
+
+            AlarmManager.RTC_WAKEUP,
+            15,
+            AlarmManager.INTERVAL_FIFTEEN_MINUTES,
+            pendingIntent
+
+        )
     }
 }
